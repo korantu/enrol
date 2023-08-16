@@ -19,17 +19,17 @@ else:
 
 if uploaded_file is not None:
     image = Image.open(uploaded_file)
+    # rotate image according to exif
+    try:
+        image = ImageOps.exif_transpose(image)
+    except:
+        pass
+
     st.image(image, caption="Uploaded Image.")
 
     image_name = st.text_input('Enter the name for the image:', 'image_name.png')
 
     if st.button('Save Image'):
-        # rotate image according to exif
-        try:
-            image = ImageOps.exif_transpose(image)
-        except:
-            pass
-
         image.save(IMAGES / image_name)
         image.save(BACKUP / image_name) # backup
         st.success(f'Image saved as {image_name}!')
