@@ -1,5 +1,5 @@
 import streamlit as st
-from PIL import Image
+from PIL import Image, ImageOps
 from pathlib import Path
 
 # config
@@ -24,6 +24,12 @@ if uploaded_file is not None:
     image_name = st.text_input('Enter the name for the image:', 'image_name.png')
 
     if st.button('Save Image'):
+        # rotate image according to exif
+        try:
+            image = ImageOps.exif_transpose(image)
+        except:
+            pass
+
         image.save(IMAGES / image_name)
         image.save(BACKUP / image_name) # backup
         st.success(f'Image saved as {image_name}!')
